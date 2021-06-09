@@ -1,5 +1,5 @@
 window.app = {
-  getMenuFromCategories: () => {
+  getMenuFromCategories: () => { // Gọi menu từ category
     fetch("http://localhost:3000/categories")
       .then((data) => data.json())
       .then((data) => {
@@ -11,26 +11,28 @@ window.app = {
         document.getElementById("list_categories").innerHTML = elements;
       });
   },
-  getProducts: () => {
+  getProducts: () => { // Lấy tất cả danh sách sản phẩm
     fetch("http://localhost:3000/products")
       .then((data) => data.json())
       .then((data) => {
         const elements = data
           .map((e) => {
-            return ` <tr>
+            return `<tr>
                         <th scope="row">${e.id}</th>
                         <td><img src="${e.image}" alt="" width="150px"></td>
                         <td>${e.name}</td>
                         <td>${e.detail}</td>
-                        <td><a href="/chi-tiet.html?id=${e.id}" class="btn btn-primary">Chi tiết</a></td>
+                        <td>
+                          <a href="/chi-tiet.html?id=${e.id}" class="btn btn-primary">Chi tiết<a>
+                          <button class="btn btn-danger" onclick="app.deleteProduct(${e.id})">Xóa</button>
+                        </td>
                     </tr>`;
           })
           .join("");
         document.getElementById("products_list").innerHTML = elements;
       });
   },
-
-  getProductsByCategory: () => {
+  getProductsByCategory: () => { // Lấy sản phẩm theo danh mục
     //   Lấy ID từ URL
     var url = new URL(location.href);
     var categoryId = url.searchParams.get("id");
@@ -45,7 +47,7 @@ window.app = {
                         <td><img src="${e.image}" alt="" width="150px"></td>
                         <td>${e.name}</td>
                         <td>${e.detail}</td>
-                        <td><a href="/chi-tiet.html?id=${e.id}" class="btn btn-primary">Chi tiết</a></td>
+                        <td><a href="/chi-tiet.html?id=${e.id}" class="btn btn-primary">Chi tiết<a></td>
                     </tr>`;
           })
           .join("");
@@ -55,10 +57,12 @@ window.app = {
     fetch(`http://localhost:3000/categories/${categoryId}`)
       .then((data) => data.json())
       .then((data) => {
-        document.getElementById("category_name").textContent = `Danh mục: ${data.name}`;
+        document.getElementById(
+          "category_name"
+        ).textContent = `Danh mục: ${data.name}`;
       });
   },
-  getProductDetail: () => {
+  getProductDetail: () => { // Chi tiết sản phẩm
     //   Lấy ID từ URL
     var url = new URL(location.href);
     var productId = url.searchParams.get("id");
@@ -82,5 +86,44 @@ window.app = {
         // Chèn HTML vào giao diện
         document.getElementById("product_detail").innerHTML = element;
       });
+  },
+  searchProduct: () => { // Tìm kiếm sản phẩm theo tên
+    // Lấy giá trị từ ô input
+    var searchInput = document.getElementById("search-input");
+
+    // Gọi API tìm kiếm sản phẩm theo tên
+    fetch(`http://localhost:3000/products?name_like=${searchInput.value}`)
+      .then((data) => data.json())
+      .then((data) => {
+        console.log(data);
+        //   Tạo HTML (node) chi tiết sản phẩm
+        const elements = data
+          .map((e) => {
+            return ` <tr>
+                        <th scope="row">${e.id}</th>
+                        <td><img src="${e.image}" alt="" width="150px"></td>
+                        <td>${e.name}</td>
+                        <td>${e.detail}</td>
+                        <td><a href="/chi-tiet.html?id=${e.id}" class="btn btn-primary">Chi tiết<a></td>
+                    </tr>`;
+          })
+          .join("");
+        document.getElementById("products_list").innerHTML = elements;
+      });
+  },
+  deleteProduct: (id) => { // Xóa sản phẩm
+    var confirmDelete = confirm("Muốn xóa thật ko?");
+
+    if (confirmDelete === true) {
+      // Gọi API xóa sản phẩm
+      fetch(`http://localhost:3000/products/${id}`, {
+        method: "DELETE",
+      })
+        .then((data) => data.json())
+        .then((data) => {
+          this.getProducts();
+          console.log(data);
+        });
+    }
   },
 };
