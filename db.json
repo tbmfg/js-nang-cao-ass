@@ -11,6 +11,10 @@
     {
       "id": 3,
       "name": "Oppo"
+    },
+    {
+      "name": "Xiaomi",
+      "id": 4
     }
   ],
   "products": [
@@ -37,6 +41,22 @@
       "price": 4000000,
       "detail": "Máy samsung",
       "image": "https://cdn.tgdd.vn/Products/Images/42/153856/iphone-xi-do-600x600.jpg"
+    },
+    {
+      "name": "Opo j j day",
+      "image": "https://cdn.tgdd.vn/Products/Images/42/220438/oppo-reno5-trang-600x600-1-600x600.jpg",
+      "detail": "SOn tung",
+      "price": "1234",
+      "categoryId": "3",
+      "id": 4
+    },
+    {
+      "name": "iPad mini 4",
+      "image": "https://cdn.tgdd.vn/Products/Images/522/228808/ipad-air-4-wifi-64gb-2020-xanhduong-600x600-600x600.jpg",
+      "detail": "iPad xịn lắm",
+      "price": "16000000",
+      "categoryId": "1",
+      "id": 5
     }
   ],
   "orders": [],
